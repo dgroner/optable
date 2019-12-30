@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
   name = 'optable', # name of package
-  version = '0.1.1',
+  version = '0.1.2',
   author = 'Daniel Groner',
   author_email = 'dgroner@fordham.edu',
   license='MIT',

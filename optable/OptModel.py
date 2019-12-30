@@ -1,7 +1,7 @@
 # Specify and solve an LP using a Pandas DataFrame
 
 import pandas as pd
-import LpModel
+from optable import LpModel
 
 class Result:
    def __init__(self):

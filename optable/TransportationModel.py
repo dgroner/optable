@@ -1,7 +1,7 @@
 # Specify and solve a Transportation Model using a Pandas DataFrame
 
 import pandas as pd
-import LpModel
+from optable import LpModel
 
 class TransportationModel:
    def __init__(self, df):
