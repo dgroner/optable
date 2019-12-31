@@ -25,7 +25,7 @@ class TransportationModel:
       b = self.getRhs()
       #print(b)
 
-      lpm = LpModel.LpModel(objdir, c, A, sense, b)
+      lpm = LpModel(objdir, c, A, sense, b)
       result = lpm.solve()
       xmatrix = self.xToMatrix(result.x)
       #TODO - construct and return result as a DataFrame

@@ -50,7 +50,7 @@ class OptModel:
       b = self.getRhs()
       #print(b)
 
-      lpm = LpModel.LpModel(objdir, c, A, sense, b)
+      lpm = LpModel(objdir, c, A, sense, b)
       res = lpm.solve()
       #print(res.slack)
 
