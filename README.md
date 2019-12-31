@@ -1,4 +1,4 @@
-optable is a Python package for teaching Math Programming
+optable is a Python package for Math Programming
 using pandas types DataFrame and Series.
 
 Types available are:

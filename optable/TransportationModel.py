@@ -1,10 +1,14 @@
 # Specify and solve a Transportation Model using a Pandas DataFrame
 
 import pandas as pd
-from optable import LpModel
+if __name__ != "__main__":
+   from . import LpModel
+else:
+   from LpModel import LpModel
 
 class TransportationModel:
    def __init__(self, df):
+      #print("in TransportationModel()")
       self.df = df
 
    # convenience method to use pandas read_csv w/ good defaults
@@ -14,8 +18,8 @@ class TransportationModel:
        sep=' ', skipinitialspace=True, index_col='name', comment='#')
       return df
    
-   def solve(self):
-      objdir = "min"
+   def solve(self, objdir="min"):
+      #objdir = "min"
       c = self.getC()
       #print(c)
       A = self.getA()
@@ -28,7 +32,7 @@ class TransportationModel:
       lpm = LpModel(objdir, c, A, sense, b)
       result = lpm.solve()
       xmatrix = self.xToMatrix(result.x)
-      #TODO - construct and return result as a DataFrame
+      # construct and return result as a DataFrame
       dfr = pd.DataFrame(columns=self.df.columns)
       dfr.drop('supply', axis=1, inplace=True)
       for row in xmatrix:
@@ -39,7 +43,7 @@ class TransportationModel:
          if i != 'demand':
             rownames.append(i)
       dfr.index = rownames
-      print(dfr)
+      #print(dfr)
       result.xmatrix = dfr
       return result
 

@@ -1,7 +1,10 @@
 # Specify and solve an LP using a Pandas DataFrame
 
 import pandas as pd
-from optable import LpModel
+if __name__ != "__main__":
+   from . import LpModel
+else:
+   from LpModel import LpModel
 
 class Result:
    def __init__(self):
@@ -12,6 +15,7 @@ class Result:
 
 class OptModel:
    def __init__(self, df):
+      #print("in OptModel()")
       self.df = df
       self.ismax = False
 
@@ -134,5 +138,3 @@ if __name__ == "__main__":
    print(result.status)
    print("x:\n" , result.x, sep='')
    print("slack:\n" , result.slack, sep='')
-
-   #print(lpmodel.getIneqNames())
