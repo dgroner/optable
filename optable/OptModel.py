@@ -3,21 +3,21 @@
 import pandas as pd
 if __name__ != "__main__":
    from . import LpModel
+   from . import Result
 else:
    from LpModel import LpModel
-
-class Result:
-   def __init__(self):
-      self.status = None
-      self.objective = None
-      self.x = None
-      self.slack = None
+   from Result import Result
 
 class OptModel:
    def __init__(self, df):
       #print("in OptModel()")
       self.df = df
       self.ismax = False
+
+   def __str__(self):
+      return self.df.fillna("").to_string()
+
+   __repl__ = __str__
 
    # convenience method to use pandas read_csv w/ good defaults
    @staticmethod
@@ -27,7 +27,15 @@ class OptModel:
             index_col='name',
             comment='#')
       return df
-   
+
+   # convenience method to use pandas read_csv w/ string & good defaults
+   @staticmethod
+   def read_str(s):
+      from io import StringIO
+      df = pd.read_csv(StringIO(s),
+       sep=' ', skipinitialspace=True, index_col='name', comment='#')
+      return df
+
    # Add checks other than those in set up methods
    def check(self):
       #TODO - check for missing values
@@ -132,9 +140,27 @@ class OptModel:
 
 if __name__ == "__main__":
    df = OptModel.read_csv("lpmodel.txt")
-   print(df.fillna(""))
+   #print(df.fillna(""))
    lpmodel = OptModel(df)
+   print(lpmodel)
    result = lpmodel.solve()
-   print(result.status)
-   print("x:\n" , result.x, sep='')
+   #print(result.status)
+   #print("x:\n" , result.x, sep='')
+   print(result)
    print("slack:\n" , result.slack, sep='')
+
+   df2 = OptModel.read_str(
+"""
+name   x1 x2  sense rhs
+# objective:
+obj     3  5    max
+# subject to:
+#x1lower 1  0    = 2
+plant1  1  0    <=   4
+plant2  0  2    <=  12
+plant3  3  2    <=  18
+""")
+   lpmodel2 = OptModel(df2)
+   print(lpmodel)
+   result2 = lpmodel2.solve()
+   print(result2)

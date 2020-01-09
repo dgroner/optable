@@ -3,18 +3,33 @@
 import pandas as pd
 if __name__ != "__main__":
    from . import LpModel
+   from . import Result
 else:
    from LpModel import LpModel
+   from Result import Result
 
 class TransportationModel:
    def __init__(self, df):
       #print("in TransportationModel()")
       self.df = df
 
+   def __str__(self):
+      return self.df.fillna("").to_string()
+
+   __repl__ = __str__
+
    # convenience method to use pandas read_csv w/ good defaults
    @staticmethod
    def read_csv(filename):
       df = pd.read_csv(filename,
+       sep=' ', skipinitialspace=True, index_col='name', comment='#')
+      return df
+
+   # convenience method to use pandas read_csv w/ string & good defaults
+   @staticmethod
+   def read_str(s):
+      from io import StringIO
+      df = pd.read_csv(StringIO(s),
        sep=' ', skipinitialspace=True, index_col='name', comment='#')
       return df
    
@@ -30,9 +45,15 @@ class TransportationModel:
       #print(b)
 
       lpm = LpModel(objdir, c, A, sense, b)
-      result = lpm.solve()
-      xmatrix = self.xToMatrix(result.x)
+      res = lpm.solve()
+
+      # if non-optimal, return terse result
+      if res.status != 0:
+         result = Result()
+         result.status = res.status
+         return result
       # construct and return result as a DataFrame
+      xmatrix = self.xToMatrix(res.x)
       dfr = pd.DataFrame(columns=self.df.columns)
       dfr.drop('supply', axis=1, inplace=True)
       for row in xmatrix:
@@ -43,7 +64,11 @@ class TransportationModel:
          if i != 'demand':
             rownames.append(i)
       dfr.index = rownames
-      #print(dfr)
+      # print(dfr)
+      # construct Result
+      result = Result()
+      result.status = res.status
+      result.objective = res.fun
       result.xmatrix = dfr
       return result
 
@@ -127,10 +152,21 @@ class TransportationModel:
 
 if __name__ == "__main__":
    df = TransportationModel.read_csv("tranmodel.txt")
-   print(df.fillna(""))
+   #print(df.fillna(""))
    tranmodel = TransportationModel(df)
+   print(tranmodel)
    result = tranmodel.solve()
-   print(result.status)
-   print(result.fun)
-   print(result.x)
-   print(result.xmatrix)
+   print(result)
+
+   df2 = TransportationModel.read_str(
+"""
+   name  D1  D2  D3  D4  supply
+   S1    464 513 654 867  75
+   S2    352 416 690 791 125
+   S3    995 682 388 685 100
+   demand 80  65  70  85
+""")
+   print(df2)
+   tranmodel2 = TransportationModel(df2)
+   result2 = tranmodel2.solve()
+   print(result2)

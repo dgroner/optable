@@ -1,4 +1,5 @@
 from optable.LpModel import LpModel
 from optable.QpModel import QpModel
-from optable.OptModel import OptModel, Result
+from optable.Result import Result
+from optable.OptModel import OptModel
 from optable.TransportationModel import TransportationModel
