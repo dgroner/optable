@@ -9,6 +9,6 @@ df2 = TransportationModel.read_str(
    demand 80  65  70  85
 """)
 print(df2)
-tranmodel2 = TransportationModel(df2)
+tranmodel2 = TransportationModel(df2,objdir="min")
 result2 = tranmodel2.solve()
 print(result2)

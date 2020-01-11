@@ -9,9 +9,10 @@ else:
    from Result import Result
 
 class TransportationModel:
-   def __init__(self, df):
+   def __init__(self, df, objdir="min"):
       #print("in TransportationModel()")
       self.df = df
+      self.objdir = objdir
 
    def __str__(self):
       return self.df.fillna("").to_string()
@@ -33,8 +34,7 @@ class TransportationModel:
        sep=' ', skipinitialspace=True, index_col='name', comment='#')
       return df
    
-   def solve(self, objdir="min"):
-      #objdir = "min"
+   def solve(self):
       c = self.getC()
       #print(c)
       A = self.getA()
@@ -44,7 +44,7 @@ class TransportationModel:
       b = self.getRhs()
       #print(b)
 
-      lpm = LpModel(objdir, c, A, sense, b)
+      lpm = LpModel(self.objdir, c, A, sense, b)
       res = lpm.solve()
 
       # if non-optimal, return terse result
@@ -167,6 +167,6 @@ if __name__ == "__main__":
    demand 80  65  70  85
 """)
    print(df2)
-   tranmodel2 = TransportationModel(df2)
+   tranmodel2 = TransportationModel(df2, objdir="min")
    result2 = tranmodel2.solve()
    print(result2)

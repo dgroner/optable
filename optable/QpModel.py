@@ -13,7 +13,7 @@ class QpModel:
     #  x0 is an initial solution guess vector
     #  bounds is the upper and lower bounds of each variable, or None
     def __init__(self, objdir, c, cqm, A, sense, b, x0, bounds=None):
-       print("in QpModel")
+       #print("in QpModel")
        self.objdir = objdir
        self.c = c
        self.cqm = cqm
